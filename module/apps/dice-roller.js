@@ -137,6 +137,8 @@ export class RollForm extends FormApplication {
                 this.object.bonusPower = 0;
             }
         }
+		
+		
         if (this.object.rollType !== 'base') {
             if (this.object.getimianflow === undefined && this.actor.type !== 'npc') {
                 this._checkAttributeBonuses();
@@ -150,7 +152,10 @@ export class RollForm extends FormApplication {
                 this.object.defense = this.object.target.actor.system.defence.value;
                 this.object.soak = this.object.target.actor.system.soak.value;
 				
+					//add committed guard (elevation) to target's defense
 				this.object.defense += this.object.target.data.elevation;
+					//add guard point total to target's soak
+				this.object.soak += this.object.target.actor.system.guard.value;
 
                 if (this.object.rollType === 'social') {
                     this.object.resolve = this.object.target.actor.system.resolve.value;
@@ -502,6 +507,11 @@ export class RollForm extends FormApplication {
             if (self) {
                 const actorData = duplicate(this.actor);
                 if (this.object.rollType === 'buildPower') {
+					
+						//add prowess to power generated
+						//seems sneaky to slip this in here but i don't want to split this method
+					total += actorData.system.prowess.value;
+					
                     if (total + actorData.system.power.value > 10) {
                         const extraPowerValue = Math.floor((total + 1 + actorData.system.power.value - 10));
                         extraPower = `<h4 class="dice-total">${extraPowerValue} Extra Power!</h4>`;
@@ -659,6 +669,8 @@ export class RollForm extends FormApplication {
                 this.actor.update(actorData);
                 if (damageTotal > 0) {
                     this.dealHealthDamage(damageTotal);
+						//drain power from hit targets
+					this.dealPowerDamage(damageTotal);
                 }
 
                 messageContent = `
@@ -690,16 +702,28 @@ export class RollForm extends FormApplication {
             }
             else if (this.object.rollType === 'withering') {
                 var powerGained = postDefenceTotal + this.object.bonusPower + 1;
+				
+					//add prowess to power gains
+				powerGained += actorData.system.prowess.value;
+				
                 if (postDefenceTotal < this.object.overwhelming) {
                     powerGained = this.object.overwhelming + 1;
                 }
                 let extraPowerMessage = ``;
-                if (powerGained + actorData.system.power.value > 10) {
-                    const extraPowerValue = Math.floor((powerGained + actorData.system.power.value - 10));
+				let maxPower = actorData.system.power.max;
+                if (powerGained + actorData.system.power.value > maxPower) {
+                    const extraPowerValue = Math.floor((powerGained + actorData.system.power.value - maxPower));
                     extraPowerMessage = `<h4 class="dice-total">${extraPowerValue} Extra Power!</h4>`;
                 }
-                actorData.system.power.value = Math.min(10, powerGained + actorData.system.power.value);
+                actorData.system.power.value = Math.min(maxPower, powerGained + actorData.system.power.value);
                 this.actor.update(actorData);
+				
+					//steal power from target
+                if (damageTotal > 0) {
+						//drain power from hit targets
+					this.dealPowerDamage(postDefenseTotal);
+                }
+	
                 messageContent = `
           <div class="chat-card">
               <div class="card-content">Withering Power</div>
@@ -803,6 +827,31 @@ export class RollForm extends FormApplication {
             this.object.target.actor.update(targetActorData);
         }
     }
+	
+	async dealPowerDamage(characterDamage) {
+        if (this.object.target && game.combat && characterDamage > 0) {
+            let vulnerablePower = 0;
+            const targetActorData = duplicate(this.object.target.actor);
+			
+			vulnerablePower = targetActorData.system.power.value + targetActorData.system.guard.value - targetActorData.system.hardness.value;
+			
+			//cycle through threat then guard until hardness threshold is reached
+			while targetActorData.system.power.value > 0 && vulnerablePower > 0 {
+				targetActorData.system.power.value -= 1;
+				vulnerablePower -= 1;
+			}
+			while targetActorData.system.guard.value > 0 && vulnerablePower > 0 {
+				targetActorData.system.guard.value -= 1;
+				vulnerablePower -= 1;
+			}
+			
+			
+			//TODO: change committed guard if losing guard points takes target below current committed guard
+			
+
+            this.object.target.actor.update(targetActorData);
+        }
+	}
 
 
     _roll() {
