@@ -1,10 +1,10 @@
 {
   "id": "exaltedessence",
   "title": "Exalted Essence",
-  "description": "Exalted Essence system module for FoundryVTT!",
+  "description": "Exalted Essence system module for FoundryVTT! (Iron Path Ruleset)",
   "author": "Aliharu",
-  "authors": [],
-  "url": "https://github.com/Aliharu/Foundry-ExEss",
+  "authors": ["Aliharu", "Ryan Looney"],
+  "url": "https://github.com/mryanlooney/Foundry-ExEss-IronPath",
   "license": "LICENSE.txt",
   "flags": {},
   "version": "0.9.7",
@@ -30,11 +30,11 @@
   "system": [],
   "relationships": [],
   "socket": false,
-  "manifest": "https://raw.githubusercontent.com/Aliharu/Foundry-ExEss/master/system.json",
-  "download": "https://github.com/Aliharu/Foundry-ExEss/releases/download/v0.9.7/release0.9.7.zip",
+  "manifest": "https://raw.githubusercontent.com/mryanlooney/Foundry-ExEss-IronPath/master/system.json",
+  "download": "https://github.com/Aliharu/Foundry-ExEss-IronPath/releases/download/v0.9.7/release0.9.7.zip",
   "protected": false,
   "gridDistance": 5,
-  "gridUnits": "ft",
+  "gridUnits": "",
   "primaryTokenAttribute": "power",
-  "secondaryTokenAttribute": "damage"
+  "secondaryTokenAttribute": "guard"
 }
