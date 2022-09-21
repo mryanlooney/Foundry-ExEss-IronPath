@@ -10,6 +10,12 @@
           "min": 0,
           "max": 10
         },
+		"guard": (
+		  "value": 0,
+		  "min": 0,
+		  "max": 10
+		},
+		
         "will": {
           "value": 0,
           "min": 0,
@@ -40,6 +46,10 @@
           "total": 0,
           "min": 0
         },
+		"prowess": {
+		  "value": 0,
+		  "min": 0
+		},
         "defence": {
           "value": 0,
           "min": 0
@@ -48,6 +58,10 @@
           "value": 1,
           "min": 0
         },
+		"toughness": {
+		  "value": 1,
+		  "min": 0
+		},
         "hardness": {
           "value": 3,
           "min": 0
