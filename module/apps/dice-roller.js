@@ -149,6 +149,8 @@ export class RollForm extends FormApplication {
             if (this.object.target) {
                 this.object.defense = this.object.target.actor.system.defence.value;
                 this.object.soak = this.object.target.actor.system.soak.value;
+				
+				this.object.defense += this.object.target.data.elevation;
 
                 if (this.object.rollType === 'social') {
                     this.object.resolve = this.object.target.actor.system.resolve.value;
