@@ -15,6 +15,8 @@
     "ExEss.Allies": "Allies",
     "ExEss.FocusWill": "Focus Will",
     "ExEss.Power": "Power",
+	"ExEss.Threat": "Threat",
+	"ExEss.Guard": "Guard",
     "ExEss.Will": "Will",
     "ExEss.Health": "Health",
     "ExEss.HealthLevels": "Health Levels",
@@ -86,10 +88,12 @@
     "ExEss.Abilities": "Abilities",
 
     "ExEss.Combat": "Combat",
+	"ExEss.Prowess": "Prowess",
     "ExEss.Defense": "Defense",
     "ExEss.Parry": "Parry",
     "ExEss.Evasion": "Evasion",
     "ExEss.Soak": "Soak",
+	"ExEss.Toughness": "Toughness",
     "ExEss.Hardness": "Hardness",
     "ExEss.Resolve": "Resolve",
 
