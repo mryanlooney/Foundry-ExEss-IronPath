@@ -127,8 +127,17 @@ Hooks.on('updateCombat', (async (combat, update) => {
       if(actorData.data.motes.value < (actorData.data.motes.total - actorData.data.motes.commited)) {
         actorData.data.motes.value++;
       }
+	  
+		//reset elevation (committed guard)
+	  const actorToken = duplicate(combatant.actor.getActiveTokens()[0]);
+	  actorData.data.guard.value -= actorToken.data.elevation;	  
+	  actorToken.data.elevation = 0;
+	  combatant.actor.getActiveTokens()[0].update(actorToken);
+	  
       combatant.actor.update(actorData);
     }
+	
+
   }
 }));
 
