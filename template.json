@@ -13,7 +13,8 @@
 		"guard": {
 		  "value": 0,
 		  "min": 0,
-		  "max": 10
+		  "max": 10,
+		  "committed": 0
 		},
 		
         "will": {
@@ -51,11 +52,11 @@
 		  "min": 0
 		},
         "defence": {
-          "value": 0,
+          "value": 3,
           "min": 0
         },
         "soak": {
-          "value": 1,
+          "value": 0,
           "min": 0
         },
 		"toughness": {
@@ -303,6 +304,9 @@
       "soak": 0,
       "penalty": 0,
       "hardness": 0,
+	  "toughness": 0,
+	  "prowess": 0,
+	  "mobility": 0,
       "tags": "",
       "equiped": true,
       "weapontype": "melee"
