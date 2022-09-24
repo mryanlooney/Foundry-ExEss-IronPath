@@ -76,14 +76,18 @@
       <div class="item-image"><img class="list-item-image" src="{{item.img}}" title="{{item.name}}" width="24" height="24" /></div>
       <h4 class="item-name">{{item.name}}</h4>
       <div class="resource-value-static">
-        {{item.system.soak}}
+        {{item.system.toughness}}
       </div>
-      <div class="resource-value-static">
-        {{item.system.penalty}}
-      </div>
+
       <div class="resource-value-static">
         {{item.system.hardness}}
       </div>
+      <div class="resource-value-static">
+        {{item.system.prowess}}
+      </div>
+      <div class="resource-value-static">
+        {{item.system.mobility}}
+      </div>	  
       <div class="item-controls">
         <a class="item-control item-chat" title="Chat Item"><i class="fas fa-comment"></i></a>
         <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>

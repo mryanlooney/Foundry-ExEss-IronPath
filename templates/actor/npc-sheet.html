@@ -219,7 +219,7 @@
             <div class="grid grid-2col flex-group-center">
                 <div class="resource-content flexrow flex-center flex-between">
                     <div>
-                        <label class="resource-label">{{localize "ExEss.Power"}}</label>
+                        <label class="resource-label">{{localize "ExEss.Threat"}}</label>
                         <input type="number" name="system.power.value" value="{{system.power.value}}"
                             data-dtype="Number" />
                     </div>
@@ -310,7 +310,7 @@
             <div>
                 <textarea type="text" name="system.qualities" rows="6">{{system.qualities}}</textarea>
             </div>
-            {{> systems/exaltedessence/templates/actor/equipment-list.html}}
+            {{> systems/exaltedessence-ironpath/templates/actor/equipment-list.html}}
 
         </div>
         {{!-- Qualities Tab --}}
@@ -345,7 +345,7 @@
         {{!-- Charms Tab --}}
         <div class="tab items" data-group="primary" data-tab="charms">
             <ol class="items-list">
-                {{> systems/exaltedessence/templates/actor/charm-list.html}}
+                {{> systems/exaltedessence-ironpath/templates/actor/charm-list.html}}
             </ol>
         </div>
 
@@ -353,12 +353,12 @@
             <div class="resource-label list-section-header">
                 {{localize "ExEss.SavedRolls"}}
             </div>
-            {{> systems/exaltedessence/templates/actor/active-effects.html}}
+            {{> systems/exaltedessence-ironpath/templates/actor/active-effects.html}}
         </div>
 
         {{!-- Intimacy Tab --}}
         <div class="tab intimacies" data-group="primary" data-tab="intimacies">
-            {{> systems/exaltedessence/templates/actor/intimacies-list.html}}
+            {{> systems/exaltedessence-ironpath/templates/actor/intimacies-list.html}}
         </div>
 
         {{!-- Biography Tab --}}
