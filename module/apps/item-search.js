@@ -25,7 +25,7 @@ export default class ItemSearch extends Application {
   static get defaultOptions() {
     const options = super.defaultOptions;
     options.id = "exess-item-search";
-    options.template = "systems/exaltedessence/templates/dialogues/item-search.html"
+    options.template = "systems/exaltedessence-ironpath/templates/dialogues/item-search.html"
     options.resizable = true;
     options.height = 900;
     options.width = 656;

@@ -24,15 +24,15 @@ export class ExaltedessenceActorSheet extends ActorSheet {
  * @type {String}
  */
   get template() {
-    if (this.actor.type === "npc") return "systems/exaltedessence/templates/actor/npc-sheet.html";
-    return "systems/exaltedessence/templates/actor/actor-sheet.html";
+    if (this.actor.type === "npc") return "systems/exaltedessence-ironpath/templates/actor/npc-sheet.html";
+    return "systems/exaltedessence-ironpath/templates/actor/actor-sheet.html";
   }
-
+  
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["exaltedessence", "sheet", "actor"],
-      template: "systems/exaltedessence/templates/actor/actor-sheet.html",
+      template: "systems/exaltedessence-ironpath/templates/actor/actor-sheet.html",
       width: 800,
       height: 1026,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "stats" }]

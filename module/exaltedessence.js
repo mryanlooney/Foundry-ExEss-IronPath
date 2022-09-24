@@ -66,13 +66,13 @@ Hooks.once('init', async function () {
 
   // Pre-load templates
   loadTemplates([
-    "systems/exaltedessence/templates/dialogues/ability-base.html",
-    "systems/exaltedessence/templates/actor/active-effects.html",
-    "systems/exaltedessence/templates/actor/equipment-list.html",
-    "systems/exaltedessence/templates/actor/charm-list.html",
-    "systems/exaltedessence/templates/actor/intimacies-list.html",
-    "systems/exaltedessence/templates/dialogues/accuracy-roll.html",
-    "systems/exaltedessence/templates/dialogues/damage-roll.html",
+    "systems/exaltedessence-ironpath/templates/dialogues/ability-base.html",
+    "systems/exaltedessence-ironpath/templates/actor/active-effects.html",
+    "systems/exaltedessence-ironpath/templates/actor/equipment-list.html",
+    "systems/exaltedessence-ironpath/templates/actor/charm-list.html",
+    "systems/exaltedessence-ironpath/templates/actor/intimacies-list.html",
+    "systems/exaltedessence-ironpath/templates/dialogues/accuracy-roll.html",
+    "systems/exaltedessence-ironpath/templates/dialogues/damage-roll.html",
   ]);
 
   // If you need to add Handlebars helpers, here are a few useful examples:
@@ -124,15 +124,15 @@ Hooks.on('updateCombat', (async (combat, update) => {
   if (update && update.round) {
     for(var combatant of combat.data.combatants) {
       const actorData = duplicate(combatant.actor)
-      if(actorData.data.motes.value < (actorData.data.motes.total - actorData.data.motes.commited)) {
-        actorData.data.motes.value++;
+      if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
+        actorData.system.motes.value++;
       }
 	  
 		//reset elevation (committed guard)
-	  const actorToken = duplicate(combatant.actor.getActiveTokens()[0]);
-	  actorData.data.guard.value -= actorToken.data.elevation;	  
-	  actorToken.data.elevation = 0;
-	  combatant.actor.getActiveTokens()[0].update(actorToken);
+	  //const actorToken = duplicate(combatant.actor.getActiveTokens()[0]);
+	  //actorData.data.guard.value -= actorToken.data.elevation;	  
+	  //actorToken.data.elevation = 0;
+	  //combatant.actor.getActiveTokens()[0].update(actorToken);
 	  
       combatant.actor.update(actorData);
     }

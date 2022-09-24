@@ -10,7 +10,7 @@ export default class TraitSelector extends DocumentSheet {
 	    id: "trait-selector",
       classes: ["exaltedessence", "trait-selector", "subconfig"],
       title: "Actor Trait Selection",
-      template: "systems/exaltedessence/templates/dialogues/trait-selector.html",
+      template: "systems/exaltedessence-ironpath/templates/dialogues/trait-selector.html",
       width: 320,
       height: "auto",
       choices: {},

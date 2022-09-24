@@ -188,12 +188,12 @@ export class RollForm extends FormApplication {
     }
 
     get template() {
-        var template = "systems/exaltedessence/templates/dialogues/ability-roll.html";
+        var template = "systems/exaltedessence-ironpath/templates/dialogues/ability-roll.html";
         if (this.object.rollType === 'base') {
-            template = "systems/exaltedessence/templates/dialogues/dice-roll.html";
+            template = "systems/exaltedessence-ironpath/templates/dialogues/dice-roll.html";
         }
         if (this.object.rollType === 'withering' || this.object.rollType === 'decisive' || this.object.rollType === 'gambit') {
-            template = "systems/exaltedessence/templates/dialogues/attack-roll.html";
+            template = "systems/exaltedessence-ironpath/templates/dialogues/attack-roll.html";
         }
         return template;
     }
@@ -230,7 +230,7 @@ export class RollForm extends FormApplication {
     }
 
     async _saveRoll(rollData) {
-        let html = await renderTemplate("systems/exaltedessence/templates/dialogues/save-roll.html", { 'name': this.object.name || 'New Roll' });
+        let html = await renderTemplate("systems/exaltedessence-ironpath/templates/dialogues/save-roll.html", { 'name': this.object.name || 'New Roll' });
         new Dialog({
             title: "Save Roll",
             content: html,
@@ -580,6 +580,7 @@ export class RollForm extends FormApplication {
 
         var postDefenceTotal = this.object.accuracyResult - this.object.defense;
         let title = "Decisive Attack";
+		var damageTotal = 0;
         if (this.object.rollType === 'withering') {
             title = "Withering Attack";
         }
@@ -611,8 +612,9 @@ export class RollForm extends FormApplication {
                     extraPowerMessage = `<h4 class="dice-total">${extraPowerValue} Extra Power!</h4>`;
                 }
             }
-            else {
-                actorData.system.power.value = Math.max(0, actorData.system.power.value - 1);
+            else { 
+				//lose all wagered power on miss
+                actorData.system.power.value = Math.max(0, actorData.system.power.value - this.object.power);
             }
             this.actor.update(actorData);
             messageContent = `
@@ -667,6 +669,7 @@ export class RollForm extends FormApplication {
 
                 actorData.system.power.value = Math.max(0, actorData.system.power.value - this.object.power);
                 this.actor.update(actorData);
+				console.log(damageTotal);
                 if (damageTotal > 0) {
                     this.dealHealthDamage(damageTotal);
 						//drain power from hit targets
@@ -701,14 +704,20 @@ export class RollForm extends FormApplication {
                 ChatMessage.create({ user: game.user.id, speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: messageContent, type: CONST.CHAT_MESSAGE_TYPES.ROLL, roll: damageRoll });
             }
             else if (this.object.rollType === 'withering') {
-                var powerGained = postDefenceTotal + this.object.bonusPower + 1;
+                var powerGained = postDefenceTotal + this.object.bonusPower;
 				
-					//add prowess to power gains
-				powerGained += actorData.system.prowess.value;
+
 				
                 if (postDefenceTotal < this.object.overwhelming) {
                     powerGained = this.object.overwhelming + 1;
                 }
+				
+					//set total to deduct from target
+				damageTotal = powerGained;
+				
+					//add prowess to power gains
+				powerGained += actorData.system.prowess.value;
+				
                 let extraPowerMessage = ``;
 				let maxPower = actorData.system.power.max;
                 if (powerGained + actorData.system.power.value > maxPower) {
@@ -721,7 +730,7 @@ export class RollForm extends FormApplication {
 					//steal power from target
                 if (damageTotal > 0) {
 						//drain power from hit targets
-					this.dealPowerDamage(postDefenseTotal);
+					this.dealPowerDamage(postDefenceTotal);
                 }
 	
                 messageContent = `
@@ -836,11 +845,11 @@ export class RollForm extends FormApplication {
 			vulnerablePower = targetActorData.system.power.value + targetActorData.system.guard.value - targetActorData.system.hardness.value;
 			
 			//cycle through threat then guard until hardness threshold is reached
-			while targetActorData.system.power.value > 0 && vulnerablePower > 0 {
+			while (targetActorData.system.power.value > 0 && vulnerablePower > 0) {
 				targetActorData.system.power.value -= 1;
 				vulnerablePower -= 1;
 			}
-			while targetActorData.system.guard.value > 0 && vulnerablePower > 0 {
+			while (targetActorData.system.guard.value > 0 && vulnerablePower > 0) {
 				targetActorData.system.guard.value -= 1;
 				vulnerablePower -= 1;
 			}
