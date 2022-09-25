@@ -704,7 +704,7 @@ export class RollForm extends FormApplication {
                 ChatMessage.create({ user: game.user.id, speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: messageContent, type: CONST.CHAT_MESSAGE_TYPES.ROLL, roll: damageRoll });
             }
             else if (this.object.rollType === 'withering') {
-                var powerGained = postDefenceTotal + this.object.bonusPower;
+                var powerGained = postDefenceTotal + this.object.bonusPower + 1;
 				
 
 				
@@ -838,24 +838,30 @@ export class RollForm extends FormApplication {
     }
 	
 	async dealPowerDamage(characterDamage) {
-        if (this.object.target && game.combat && characterDamage > 0) {
+        if (this.object.target && characterDamage > 0) {
+			let unresolvedDamage = characterDamage;
             let vulnerablePower = 0;
             const targetActorData = duplicate(this.object.target.actor);
 			
-			vulnerablePower = targetActorData.system.power.value + targetActorData.system.guard.value - targetActorData.system.hardness.value;
+			vulnerablePower = targetActorData.system.power.value + targetActorData.system.guard.value + targetActorData.system.guard.committed - targetActorData.system.hardness.value;
 			
-			//cycle through threat then guard until hardness threshold is reached
-			while (targetActorData.system.power.value > 0 && vulnerablePower > 0) {
+			//cycle through threat then guard then committed guard until hardness threshold is reached
+			while (unresolvedDamage > 0 && targetActorData.system.power.value > 0 && vulnerablePower > 0) {
 				targetActorData.system.power.value -= 1;
 				vulnerablePower -= 1;
+				unresolvedDamage -= 1;
 			}
-			while (targetActorData.system.guard.value > 0 && vulnerablePower > 0) {
+			while (unresolvedDamage > 0 && targetActorData.system.guard.value > 0 && vulnerablePower > 0) {
 				targetActorData.system.guard.value -= 1;
 				vulnerablePower -= 1;
+				unresolvedDamage -= 1;
+			}
+			while (unresolvedDamage > 0 && targetActorData.system.guard.committed > 0 && vulnerablePower > 0) {
+				targetActorData.system.guard.committed -= 1;
+				vulnerablePower -= 1;
+				unresolvedDamage -= 1;
 			}
 			
-			
-			//TODO: change committed guard if losing guard points takes target below current committed guard
 			
 
             this.object.target.actor.update(targetActorData);
