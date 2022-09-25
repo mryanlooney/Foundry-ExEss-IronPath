@@ -16,6 +16,10 @@
 		  "max": 10,
 		  "committed": 0
 		},
+		"committed_guard": {
+		  "value": 0,
+		  "min": 0
+		  },
 		
         "will": {
           "value": 0,
