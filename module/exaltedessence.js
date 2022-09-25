@@ -127,6 +127,8 @@ Hooks.on('updateCombat', (async (combat, update) => {
       if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
         actorData.system.motes.value++;
       }
+	  actorData.system.guard.value -= actorData.system.guard.committed;
+	  actorData.system.guard.committed = 0;
 	  
 		//reset elevation (committed guard)
 	  //const actorToken = duplicate(combatant.actor.getActiveTokens()[0]);
@@ -140,6 +142,15 @@ Hooks.on('updateCombat', (async (combat, update) => {
 
   }
 }));
+
+Hooks.on('updateCombatant', async (LancerCombatant) {
+	if (LancerCombatant){
+      const actorData = duplicate(LancerCombatant.actor)
+	  actorData.system.guard.value -= actorData.system.guard.committed;
+	  actorData.system.guard.committed = 0;
+	  LancerCombatant.actor.update(actorData);
+	}
+}
 
 Hooks.once("ready", async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
