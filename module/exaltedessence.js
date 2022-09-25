@@ -143,7 +143,7 @@ Hooks.on('updateCombat', (async (combat, update) => {
   }
 }));
 
-Hooks.on('updateCombatant', async (LancerCombatant) => {
+Hooks.on('updateCombatant', (async (LancerCombatant) => {
 	if (LancerCombatant){
       //const actorData = duplicate(LancerCombatant.actor)
 	  let actorData = LancerCombatant.actor;
@@ -154,8 +154,9 @@ Hooks.on('updateCombatant', async (LancerCombatant) => {
 	  //LancerCombatant.actor.update(actorData);
 	}
 }
+}));
 
-Hooks.on('createCombatant', async (LancerCombatant) => {
+Hooks.on('createCombatant', (async (LancerCombatant) => {
 	if (LancerCombatant){
 		let actorData = LancerCombatant.actor;
 		if (actorData){
@@ -163,8 +164,9 @@ Hooks.on('createCombatant', async (LancerCombatant) => {
 			actorData.system.guard.value = actorData.system.toughness;
 		}
 	}
-}
-Hooks.on('refreshToken', async (Token) => {
+}));
+
+Hooks.on('refreshToken', (async (Token) => {
 	if (Token){
 		let actorData = Token.system.actorData;
 		if (actorData){
@@ -173,7 +175,7 @@ Hooks.on('refreshToken', async (Token) => {
 			}
 		}
 	}
-}
+}));
 
 Hooks.once("ready", async function () {
   // Wait to register hotbar drop hook on ready so that modules could register earlier if they want to
