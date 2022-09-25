@@ -143,12 +143,35 @@ Hooks.on('updateCombat', (async (combat, update) => {
   }
 }));
 
-Hooks.on('updateCombatant', async (LancerCombatant) {
+Hooks.on('updateCombatant', async (LancerCombatant) => {
 	if (LancerCombatant){
-      const actorData = duplicate(LancerCombatant.actor)
-	  actorData.system.guard.value -= actorData.system.guard.committed;
-	  actorData.system.guard.committed = 0;
-	  LancerCombatant.actor.update(actorData);
+      //const actorData = duplicate(LancerCombatant.actor)
+	  let actorData = LancerCombatant.actor;
+      if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
+        actorData.system.motes.value++;	  
+	  actorData.system.guard.value -= actorData.system.committed-guard;
+	  actorData.system.committed-guard = 0;
+	  //LancerCombatant.actor.update(actorData);
+	}
+}
+
+Hooks.on('createCombatant', async (LancerCombatant) => {
+	if (LancerCombatant){
+		let actorData = LancerCombatant.actor;
+		if (actorData){
+			actorData.system.power.value = 0;
+			actorData.system.guard.value = actorData.system.toughness;
+		}
+	}
+}
+Hooks.on('refreshToken', async (Token) => {
+	if (Token){
+		let actorData = Token.system.actorData;
+		if (actorData){
+			if (Token.system.elevation <= actorData.system.guard.value) && (Token.system.elevation >= 0) {
+				actorData.system.committed-guard = Token.system.elevation;
+			}
+		}
 	}
 }
 
