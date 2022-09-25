@@ -613,8 +613,8 @@ export class RollForm extends FormApplication {
                 }
             }
             else { 
-				//lose all wagered power on miss
-                actorData.system.power.value = Math.max(0, actorData.system.power.value - this.object.power);
+				//lose half of existing power on a miss
+                actorData.system.power.value = Math.max(0, actorData.system.power.value - (this.object.power/2));
             }
             this.actor.update(actorData);
             messageContent = `
