@@ -120,7 +120,7 @@ Hooks.on('updateCombat', (async (combat, update) => {
   if (combat.current === undefined) {
     combat = game.combat;
   }
-
+/*
   if (update && update.round) {
     for(var combatant of combat.data.combatants) {
       const actorData = duplicate(combatant.actor)
@@ -141,6 +141,7 @@ Hooks.on('updateCombat', (async (combat, update) => {
 	
 
   }
+  */
 }));
 
 Hooks.on('updateCombatant', (async (LancerCombatant) => {
@@ -149,9 +150,25 @@ Hooks.on('updateCombatant', (async (LancerCombatant) => {
 	  let actorData = LancerCombatant.actor;
       if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
         actorData.system.motes.value++;	  
-	  actorData.system.guard.value -= actorData.system.committed-guard;
-	  actorData.system.committed-guard = 0;
+	  }
+	  actorData.system.guard.value -= actorData.system.committed_guard.value;
+
+	  actorData.system.committed_guard.value = 0;
+	  
 	  //LancerCombatant.actor.update(actorData);
+	  let token = LancerCombatant.token;
+	  //token.elevation = 0;
+	  const tokens = [token];
+	  const updates = tokens.map((token) => ({
+		  _id: token.id,
+		  elevation: 0,	  
+	  }));
+	  await canvas.scene.updateEmbeddedDocuments("Token", updates);
+	  // Force token HUD to re-render, to make its elevation input show the new height
+	  if (canvas.hud.token.rendered) {
+		canvas.hud.token.render();
+  }
+	  
 	}
 }
 }));
@@ -161,17 +178,17 @@ Hooks.on('createCombatant', (async (LancerCombatant) => {
 		let actorData = LancerCombatant.actor;
 		if (actorData){
 			actorData.system.power.value = 0;
-			actorData.system.guard.value = actorData.system.toughness;
+			actorData.system.guard.value = actorData.system.toughness.value;
 		}
 	}
 }));
 
-Hooks.on('refreshToken', (async (Token) => {
-	if (Token){
-		let actorData = Token.system.actorData;
+Hooks.on('updateToken', (async (TokenDocument) => {
+	if (TokenDocument){
+		const actorData = TokenDocument.getActor();//actor;
 		if (actorData){
-			if (Token.system.elevation <= actorData.system.guard.value) && (Token.system.elevation >= 0) {
-				actorData.system.committed-guard = Token.system.elevation;
+			if ((TokenDocument.elevation <= actorData.system.guard.value) && (TokenDocument.elevation >= 0)){
+				actorData.system.committed_guard.value = TokenDocument.elevation;
 			}
 		}
 	}
