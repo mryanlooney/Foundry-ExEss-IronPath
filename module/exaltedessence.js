@@ -148,9 +148,9 @@ Hooks.on('updateCombatant', (async (LancerCombatant) => {
 	if (LancerCombatant){
       //const actorData = duplicate(LancerCombatant.actor)
 	  let actorData = LancerCombatant.actor;
-      if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
-        actorData.system.motes.value++;	  
-	  }
+		  if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
+			actorData.system.motes.value++;	  
+		  }
 	  actorData.system.guard.value -= actorData.system.committed_guard.value;
 
 	  actorData.system.committed_guard.value = 0;
@@ -170,7 +170,6 @@ Hooks.on('updateCombatant', (async (LancerCombatant) => {
   }
 	  
 	}
-}
 }));
 
 Hooks.on('createCombatant', (async (LancerCombatant) => {
