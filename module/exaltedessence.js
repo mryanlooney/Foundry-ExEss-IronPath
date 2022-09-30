@@ -146,24 +146,27 @@ Hooks.on('updateCombat', (async (combat, update) => {
 
 Hooks.on('updateCombatant', (async (LancerCombatant) => {
 	if (LancerCombatant){
-      //const actorData = duplicate(LancerCombatant.actor)
-	  let actorData = LancerCombatant.actor;
+      const actorData = duplicate(LancerCombatant.actor)
+	  let token = LancerCombatant.token;
+	  //let actorData = LancerCombatant.actor;
 		  if(actorData.system.motes.value < (actorData.system.motes.total - actorData.system.motes.commited)) {
 			actorData.system.motes.value++;	  
 		  }
-	  actorData.system.guard.value -= actorData.system.committed_guard.value;
+	  //actorData.system.guard.value -= actorData.system.committed_guard.value;
+	  actorData.system.guard.value -= token.elevation;
 
-	  actorData.system.committed_guard.value = 0;
+	  //actorData.system.committed_guard.value = 0;
 	  
-	  //LancerCombatant.actor.update(actorData);
-	  let token = LancerCombatant.token;
-	  //token.elevation = 0;
-	  const tokens = [token];
-	  const updates = tokens.map((token) => ({
-		  _id: token.id,
-		  elevation: 0,	  
-	  }));
-	  await canvas.scene.updateEmbeddedDocuments("Token", updates);
+	  
+
+	  token.elevation = 0;
+	  //const tokens = [token];
+	  //const updates = tokens.map((token) => ({
+		//  _id: token.id,
+		//  elevation: 0,	  
+	  //}));
+	  LancerCombatant.actor.update(actorData);
+	  await canvas.scene.updateEmbeddedDocuments("Token", [token]);
 	  // Force token HUD to re-render, to make its elevation input show the new height
 	  if (canvas.hud.token.rendered) {
 		canvas.hud.token.render();
@@ -188,6 +191,11 @@ Hooks.on('updateToken', (async (TokenDocument) => {
 		if (actorData){
 			if ((TokenDocument.elevation <= actorData.system.guard.value) && (TokenDocument.elevation >= 0)){
 				actorData.system.committed_guard.value = TokenDocument.elevation;
+			}
+			else
+			{
+				//return committed guard + elevation ui to 0
+				TokenDocument.elevation = 0;
 			}
 		}
 	}
